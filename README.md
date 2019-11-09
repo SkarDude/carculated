@@ -23,4 +23,4 @@ Note: build folder is created when you run either npm run watch (for development
 
 ## Contribution
 
-Suggestions and pull requests are welcomed!.
+Suggestions and pull requests are welcomed!
