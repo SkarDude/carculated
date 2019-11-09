@@ -1,4 +1,4 @@
-var car_makes = [{
+export var carMakes = [{
         "make_id": "1",
         "make": "AC"
     },
@@ -695,7 +695,7 @@ var car_makes = [{
         "make": "ZX"
     }
 ];
-var car_models = [{
+export var carModels = [{
         "model_id": "3",
         "model": "Cobra",
         "make_id": "1"
