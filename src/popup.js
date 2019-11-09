@@ -35,10 +35,14 @@ import {
     selectMake.appendChild(el);
   }
   selectMake.onchange = function () {
+    document.getElementById("selectModel").innerHTML = ""
     var e = document.getElementById("selectMake");
     var makeID = e.options[e.selectedIndex].value;
     var models = carModels.filter(x => x.make_id === makeID);
     var selectModel = document.getElementById("selectModel");
+    var el = document.createElement("option");
+    el.textContent = "Model";
+    selectModel.appendChild(el);
     for (var i = 0; i < models.length; i++) {
       var opt = models[i];
       var el = document.createElement("option");
@@ -47,6 +51,81 @@ import {
       selectModel.appendChild(el);
     }
   }
+  selectModel.onchange = function () {
+    var year = getYear()
+    var make = getMake()
+    var model = getModel()
+    getStyleId(make, model, year)
+  }
+
+  function getYear() {
+    var e = document.getElementById("selectYear");
+    var year = e.options[e.selectedIndex].text;
+    return year
+  }
+
+  function getMake() {
+    var e = document.getElementById("selectMake");
+    var make = e.options[e.selectedIndex].text;
+    return make
+  }
+
+  function getModel() {
+    var e = document.getElementById("selectModel");
+    var model = e.options[e.selectedIndex].text;
+    return model
+  }
+
+  function getStyleId(make, model, year) {
+    var url = `https://www.edmunds.com/gateway/api/vehicle/v4/makes/${make}/models/${model}/years/${year}/styles/`;
+    var request = new XMLHttpRequest()
+
+    request.open('GET', url, true)
+    request.onload = function () {
+      var data = JSON.parse(this.response)
+      if (request.status >= 200 && request.status < 400) {
+        console.log(make)
+        calculateValues(data.results[0]["id"], make, model, year)
+      } else {
+        alert("Vehicle not found")
+      }
+    }
+
+    request.send()
+  }
+
+  function calculateValues(styleID) {
+    var year = getYear()
+    var make = getMake()
+    var model = getModel()
+    var url = `https://www.edmunds.com/gateway/api/coreresearch/v1/tco/makes/${make}/models/${model}/years/${year}/zips/85035/styles/${styleID}/`
+
+    var request = new XMLHttpRequest()
+
+    request.open('GET', url, true)
+    request.onload = function () {
+      var data = JSON.parse(this.response)
+      if (request.status >= 200 && request.status < 400) {
+        let insurance = parseFloat(data.results[Object.keys(data.results)[0]][0]["tco"]["total"]["insurance"]) || 0.0
+        if (insurance === 0.0) {
+          alert("Estimations not found")
+          return
+        }
+        let maintenance = parseFloat(data.results[Object.keys(data.results)[0]][0]["tco"]["total"]["maintenance"])
+        let repairs = parseFloat(data.results[Object.keys(data.results)[0]][0]["tco"]["total"]["repairs"])
+        insurance = insurance / 60
+        maintenance = maintenance / 60
+        repairs = repairs / 60
+        var total = insurance + maintenance + repairs
+        alert(Number((total).toFixed(2)))
+      } else {
+        alert("Estimations not found")
+      }
+    }
+
+    request.send()
+  }
+
 
 
   // Communicate with background file by sending a message
