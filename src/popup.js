@@ -15,6 +15,16 @@ import {
   // More information on Permissions can we found at
   // https://developer.chrome.com/extensions/declare_permissions
 
+  var selectYear = document.getElementById("selectYear");
+  var today = new Date();
+  var yyyy = today.getFullYear();
+  for (var i = 0; i < 12; i++) {
+    var opt = yyyy - i
+    var el = document.createElement("option");
+    el.textContent = opt;
+    el.value = opt;
+    selectYear.appendChild(el);
+  }
   var selectMake = document.getElementById("selectMake");
   var makes = carMakes;
   for (var i = 0; i < makes.length; i++) {
