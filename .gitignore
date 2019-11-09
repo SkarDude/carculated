@@ -42,3 +42,13 @@ Temporary Items
 .history
 
 # End of https://www.gitignore.io/api/macos,visualstudiocode
+
+
+# dependencies
+/node_modules
+
+# production
+/build
+
+#misc
+npm-debug.log*
