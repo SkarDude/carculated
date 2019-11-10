@@ -49,7 +49,7 @@ Temporary Items
 
 # production
 /build
-.zip
+*.zip
 size-plugin.json
 
 #misc
