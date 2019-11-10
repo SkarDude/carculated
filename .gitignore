@@ -49,6 +49,8 @@ Temporary Items
 
 # production
 /build
+.zip
+size-plugin.json
 
 #misc
 npm-debug.log*
